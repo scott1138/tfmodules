@@ -122,7 +122,7 @@ resource "azurerm_mysql_firewall_rule" "mysql_fw_azure" {
   end_ip_address      = "0.0.0.0"
 }
 
-# Allow Access to MySQL from the Freeman Akard datacenter and vpn
+# Allow Access to MySQL from the datacenter and vpn
 resource "azurerm_mysql_firewall_rule" "mysql_fw_akard" {
   name                = "DC_and_VPN"
   resource_group_name = azurerm_resource_group.rg.name
@@ -131,7 +131,7 @@ resource "azurerm_mysql_firewall_rule" "mysql_fw_akard" {
   end_ip_address      = "63.164.100.64"
 }
 
-# Allow Access to MySQL from the Freeman Corporate office
+# Allow Access to MySQL from the Corporate office
 resource "azurerm_mysql_firewall_rule" "mysql_fw_corp" {
   name                = "Corporate_Office"
   resource_group_name = azurerm_resource_group.rg.name
@@ -140,7 +140,7 @@ resource "azurerm_mysql_firewall_rule" "mysql_fw_corp" {
   end_ip_address      = "209.163.178.60"
 }
 
-# Create a databse for freeman.com
+# Create a databse for the app
 module "mysql_database" {
   source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureMySQLDatabase_2.0.0.0.zip"
 

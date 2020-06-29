@@ -38,7 +38,7 @@ resource "azurerm_resource_group" "rg" {
 
 # Create the web servers
 module "vm" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureVM_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureVM.zip"
 
   # VM definition
   quantity            = "#{vm_quantity}#"
@@ -77,7 +77,7 @@ module "vm" {
 
 # Create the web server load balancer
 module "lb" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureBasicILB_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureBasicILB.zip"
 
   resource_group_name         = azurerm_resource_group.rg.name
   location                    = azurerm_resource_group.rg.location
@@ -101,7 +101,7 @@ module "lb" {
 
 # Create the Azure MySQL PaaS instance
 module "mysql_server" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureMySQLServer_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureMySQLServer.zip"
 
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
@@ -142,7 +142,7 @@ resource "azurerm_mysql_firewall_rule" "mysql_fw_corp" {
 
 # Create a databse for the app
 module "mysql_database" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureMySQLDatabase_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureMySQLDatabase.zip"
 
   name                = "#{mysql_database_name}#"
   resource_group_name = azurerm_resource_group.rg.name
@@ -151,7 +151,7 @@ module "mysql_database" {
 
 # Create a key vault for storing secrets
 module "kv" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKeyVault_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKeyVault.zip"
 
   name = "KV-<application_name>-${local.env_name}"
   resource_group_name = azurerm_resource_group.rg.name
@@ -160,7 +160,7 @@ module "kv" {
 
 # Allow the VM managed identities to access the key vault
 module "kv_access_vm" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVAccess_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVAccess.zip"
 
   quantity            = "#{vm_quantity}#"
   key_vault_id        = module.kv.id
@@ -171,7 +171,7 @@ module "kv_access_vm" {
 
 # Allow SP used in ADO pipeline to add or read secrets
 module "kv_access_ado_sp" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVAccess_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVAccess.zip"
 
   quantity                = "1"
   key_vault_id            = module.kv.id
@@ -182,7 +182,7 @@ module "kv_access_ado_sp" {
 
 # Add secret - MySQL Server FQDN
 module "kv_secret_mysql_fqdn" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVSecret_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVSecret.zip"
 
   key_vault_id = module.kv.id
   name         = "mysql-fqdn"
@@ -192,7 +192,7 @@ module "kv_secret_mysql_fqdn" {
 
 # Add secret - MySQL database name
 module "kv_secret_mysql_db" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVSecret_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVSecret.zip"
 
   key_vault_id = module.kv.id
   name         = "mysql-db"
@@ -202,7 +202,7 @@ module "kv_secret_mysql_db" {
 
 # Add secret - MySQL app user
 module "kv_secret_mysql_app_user" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVSecret_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVSecret.zip"
 
   key_vault_id = module.kv.id
   name         = "mysql-app-user"
@@ -212,7 +212,7 @@ module "kv_secret_mysql_app_user" {
 
 # Add secret - MySQL app user password
 module "kv_secret_mysql_app_user_pw" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVSecret_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVSecret.zip"
 
   key_vault_id = module.kv.id
   name         = "mysql-app-user-pw"
@@ -222,7 +222,7 @@ module "kv_secret_mysql_app_user_pw" {
 
 # Add certificate - web server cert
 module "kv_cert_app" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVCert_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVCert.zip"
 
   key_vault_id  = module.kv.id
   name          = "<application_name>"
@@ -233,7 +233,7 @@ module "kv_cert_app" {
 
 # Add secret - MySQL app user password
 module "kv_secret_cert_pw" {
-  source = "https://<storage_account_name>.blob.core.windows.net/terraformtemplates/AzureKVSecret_2.0.0.0.zip"
+  source = "https://<storage_account_name>.blob.core.windows.net/tfmodules/AzureKVSecret.zip"
 
   key_vault_id = module.kv.id
   name         = "cert-password"

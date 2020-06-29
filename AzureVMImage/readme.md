@@ -31,12 +31,12 @@ Changes from AzureImages 1.0.0.0
 ## Example 1 - Use with default WS2016
 <!-- In VS Code the line feeds don't show in the markdown preview but it is correct on the Azure DevOps Wiki -->
 module "image" {
-&emsp;source  = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureVMImage_2.0.0.0.zip"
+&emsp;source  = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureVMImage.zip"
 }
 
 ## Example 2 - Provide an Image name (see table below)
 module "image" {
-&emsp;source  = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureVMImage_2.0.0.0.zip"
+&emsp;source  = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureVMImage.zip"
 &emsp;image   = "WS2019"
 }
 

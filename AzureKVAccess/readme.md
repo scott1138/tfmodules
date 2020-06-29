@@ -57,7 +57,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "vm" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureVM_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureVM.zip"
 
 &emsp;count = "2"
 &emsp;admin_username = "admin_username"
@@ -81,7 +81,7 @@ module "vm" {
 }
 
 module "kv" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKeyVault_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKeyVault.zip"
 
 &emsp;name = "KV-AppName-Environment"
 &emsp;resource_group_name = azurerm_resource_group.rg.name
@@ -89,7 +89,7 @@ module "kv" {
 }
 
 module "kv_access" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKVAccess_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKVAccess.zip"
 
 &emsp;key_vault_id = module.kv.id
 &emsp;resource_group_name = azurerm_resource_group.rg.name
@@ -101,7 +101,7 @@ module "kv_access" {
 
 ## Example 2 - Creating Key Vault access for a known group
 module "kv_access" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKVAccess_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKVAccess.zip"
 
 &emsp;key_vault_id = module.kv.id
 &emsp;resource_group_name = azurerm_resource_group.rg.name

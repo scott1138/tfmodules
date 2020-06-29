@@ -50,7 +50,7 @@ data "azurerm_key_vault" "kv" {
 }
 
 module "storage" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKVStorage_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKVStorage.zip"
 
 &emsp;storage_account_name = "somelowercasename"
 &emsp;resource_group_name = "RG-SomeRGName"
@@ -58,7 +58,7 @@ module "storage" {
 }
 
 module "kvsecret" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKVSecret_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKVSecret.zip"
 
 &emsp;secret_name = "SomeDescriptiveName"
 &emsp;\# We want to use the output of another resource to hide the value of the secret and enhance our automation
@@ -86,7 +86,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "kv" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKeyVault_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKeyVault.zip"
 
 &emsp;name = "KV-AppName-Environment"
 &emsp;resource_group_name = "RG-AppName-Region-Environment"
@@ -95,7 +95,7 @@ module "kv" {
 
 
 module "kvsecret" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKVSecret_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKVSecret.zip"
 
 &emsp;secret_name = "SomeDescriptiveName"
 &emsp;\# We want to use a token replaced at run time to hide the value of the secret and enhance our automation

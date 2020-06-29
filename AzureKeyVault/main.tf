@@ -10,14 +10,14 @@ data "azurerm_resource_group" "rg_name" {
 
 # User running Terraform
 module "userinfo" {
-  source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureUserInfo_2.0.0.0.zip"
+  source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureUserInfo.zip"
 }
 
 # Variables used internally
 locals {
 
   base_tags = {
-    Source       = "TFModule-AzureKeyVault_2.0.0.0"
+    Source       = "TFModule-AzureKeyVault"
     CreatedDate  = timestamp()
     CreatorName  = module.userinfo.name
     CreatorObjId = module.userinfo.object_id

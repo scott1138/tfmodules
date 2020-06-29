@@ -45,7 +45,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "kv" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureKeyVault_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureKeyVault.zip"
 
 &emsp;name = "KV-AppName-Environment"
 &emsp;resource_group_name = "RG-AppName-Region-Environment"

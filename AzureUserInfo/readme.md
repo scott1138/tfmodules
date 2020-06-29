@@ -35,12 +35,12 @@ Changes since <ModuleName> <Version>
 ## Example 1 - Basic Deployment
 <!-- In VS Code the line feeds don't show in the markdown preview but it is correct on the Azure DevOps Wiki -->
 module "userinfo" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureUserInfo_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureUserInfo.zip"
 }
 
 locals {
 &emsp;base_tags = {
-&emsp;&emsp;Source       = "TFModule-AzureVM_2.0.0.0"
+&emsp;&emsp;Source       = "TFModule-AzureVM"
 &emsp;&emsp;CreatedDate  = timestamp()
 &emsp;&emsp;CreatorName  = module.userinfo.name
 &emsp;&emsp;CreatorObjId = module.userinfo.object_id

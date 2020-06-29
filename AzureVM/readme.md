@@ -11,7 +11,7 @@ Changes from AzureVM 1.1.0.0
 * The input variable count is now named quantity and is a number type. (count has become a reserved keyword in HCL 2)
 * Moved data disk under virtual machine resource
 * Added support for multiple data disks
-* Changed OS variable to Image.  Moved image table to AzureVMImage_2.0.0.0 module
+* Changed OS variable to Image.  Moved image table to AzureVMImage module
 * The input variable resource_group is now resource_group_name
 * Added a principal_id output for system managed identity
 * Dynamic blocks for data disks allowed the remove of separate data disk resources.  There is now just win_vm and linux_vm.
@@ -77,7 +77,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "vm" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureVM_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureVM.zip"
 
 &emsp;count = "2"
 &emsp;admin_username = "admin_username"
@@ -119,7 +119,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "vm" {
-&emsp;source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureVM_2.0.0.0.zip"
+&emsp;source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureVM.zip"
 
 &emsp;count = "2"
 &emsp;admin_username = "admin_username"

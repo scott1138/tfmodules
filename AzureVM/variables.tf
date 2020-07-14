@@ -16,6 +16,12 @@ variable "vm_prefix" {
   description = "(Required) Default prefix to use with your VM name. example: PRDAPPWFE"
 }
 
+variable "offset" {
+  description = "Offest of VM naming count.  To start with 03 set the offset to 2."
+  type = number
+  default = 0
+}
+
 variable "vm_size" {
   description = "(Required) Azure VM size"
 }
@@ -45,15 +51,19 @@ variable "image" {
 variable "data_disk" {
   description = <<EOD
 (Optional) Data Disk details.  Leave blank if not needed.
+Valid values for Type are Standard_LRS, StandardSSD_LRS, Premium_LRS or UltraSSD_LRS.
+StandardSSD_LRS for nonproduction and Premium_LRS for production are preferred.
 Valid values for Caching are Blank(defaults to ReadOnly), ReadOnly, ReadWrite, or None.
 Check application documentation for the correct caching settings.
 data_disk = [
   {
+    Type    = "StandardSSD_LRS"
     LUN     = "1"
     Size    = "512"
     Caching = ""
   },
   {
+    Type    = "Premium_LRS"
     LUN     = "2"
     Size    = "1024"
     Caching = "None"
@@ -65,8 +75,13 @@ EOD
 }
 
 variable "os_disk_size" {
-  description = "Size of a OS disk.  Leave blank for default"
+  description = "Size of the OS disk. Do not include to use the default."
   default     = ""
+}
+
+variable "os_disk_type" {
+  description = "Storage type of the OS disk. Valid values are Standard_LRS, StandardSSD_LRS or Premium_LRS. Default value is StandardSSD_LRS."
+  default     = "StandardSSD_LRS"
 }
 
 variable "admin_username" {
@@ -79,7 +94,7 @@ variable "admin_password" {
 }
 
 variable "diag_storage_account_name" {
-  description = "(Required) Storage account used for diag logs, should be on per subscription - stgstd<SubName>diags"
+  description = "(Required) Storage account used for diag logs, should be on per subscription - <Subscription>diags"
 }
 
 variable "diag_storage_account_rg" {
@@ -87,7 +102,7 @@ variable "diag_storage_account_rg" {
 }
 
 variable "ssh_key" {
-  description = "SSH Key for Windows Systems"
+  description = "SSH Key for Linux Systems"
   default     = ""
 }
 

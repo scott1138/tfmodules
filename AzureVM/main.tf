@@ -1,6 +1,6 @@
 # User running Terraform
 module "userinfo" {
-  source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureUserInfo.zip"
+  source = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureUserInfo.zip"
 }
 
 # Variables used internally
@@ -20,7 +20,7 @@ locals {
 
 # Image Info
 module "image" {
-  source      = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureVMImage.zip"
+  source      = "https://somestorageaccount.blob.core.windows.net/terraformtemplates/AzureVMImage.zip"
   image = var.image
 }
 
@@ -59,7 +59,7 @@ data "azurerm_resource_group" "rg" {
 
 resource "azurerm_network_interface" "ni" {
   count               = var.quantity
-  name                = "NI-${format("%s%02d", var.vm_prefix, count.index + 1)}"
+  name                = "NI-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   tags                = merge(local.tf_tag, var.tags)
@@ -104,7 +104,7 @@ resource "azurerm_availability_set" "availabilityset" {
 # win_vm - if offer is WindowsServer, the count is var.quantity, else it is 0
 resource "azurerm_virtual_machine" "win_vm" {
   count                 = element(module.image.info, 3) == "Windows" ? var.quantity : 0
-  name                  = "VM-${format("%s%02d", var.vm_prefix, count.index + 1)}"
+  name                  = "VM-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}"
   location              = data.azurerm_resource_group.rg.location
   resource_group_name   = data.azurerm_resource_group.rg.name
   network_interface_ids = [element(azurerm_network_interface.ni.*.id, count.index)]
@@ -124,27 +124,27 @@ resource "azurerm_virtual_machine" "win_vm" {
   }
 
   storage_os_disk {
-    name              = "DISK-${format("%s%02d", var.vm_prefix, count.index + 1)}-OS"
+    name              = "DISK-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}-OS"
     create_option     = "FromImage"
     caching           = "ReadWrite"
-    managed_disk_type = "Premium_LRS"
+    managed_disk_type = var.os_disk_type
     disk_size_gb      = var.os_disk_size == "" ? "128" : var.os_disk_size
   }
 
   dynamic "storage_data_disk" {
     for_each = var.data_disk
     content {
-      name            = "DISK-${format("%s%02d", var.vm_prefix, count.index)}-DATA${format("%02d",storage_data_disk.value["LUN"])}"
-      create_option   = "Empty"
-      managed_disk_type = "Premium_LRS"
-      lun             = storage_data_disk.value["LUN"] 
-      disk_size_gb    = storage_data_disk.value["Size"]
-      caching         = storage_data_disk.value["Caching"] == "" ? "ReadOnly" : storage_data_disk.value["Caching"]
+      name              = "DISK-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}-DATA${format("%02d",storage_data_disk.value["LUN"])}"
+      create_option     = "Empty"
+      managed_disk_type = storage_data_disk.value["Type"]
+      lun               = storage_data_disk.value["LUN"] 
+      disk_size_gb      = storage_data_disk.value["Size"]
+      caching           = storage_data_disk.value["Caching"] == "" ? "ReadOnly" : storage_data_disk.value["Caching"]
     }
   }
 
   os_profile {
-    computer_name  = "VM-${format("%s%02d", var.vm_prefix, count.index + 1)}"
+    computer_name  = "VM-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}"
     admin_username = var.admin_username
     admin_password = var.admin_password
   }
@@ -192,7 +192,7 @@ resource "azurerm_virtual_machine" "win_vm" {
 # linux_vm - if os offer is Linux, the count is var.quantity, else it is 0
 resource "azurerm_virtual_machine" "linux_vm" {
   count                 = element(module.image.info, 3) == "Linux" ? var.quantity : 0
-  name                  = "VM-${format("%s%02d", var.vm_prefix, count.index + 1)}"
+  name                  = "VM-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}"
   location              = data.azurerm_resource_group.rg.location
   resource_group_name   = data.azurerm_resource_group.rg.name
   network_interface_ids = [element(azurerm_network_interface.ni.*.id, count.index)]
@@ -211,27 +211,27 @@ resource "azurerm_virtual_machine" "linux_vm" {
   }
 
   storage_os_disk {
-    name              = "DISK-${format("%s%02d", var.vm_prefix, count.index + 1)}-OS"
+    name              = "DISK-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}-OS"
     create_option     = "FromImage"
     caching           = "ReadWrite"
-    managed_disk_type = "Premium_LRS"
+    managed_disk_type = var.os_disk_type
     disk_size_gb      = var.os_disk_size == "" ? "128" : var.os_disk_size
   }
 
   dynamic "storage_data_disk" {
     for_each = var.data_disk
     content {
-      name            = "DISK-${format("%s%02d", var.vm_prefix, count.index)}-DATA${format("%02d",storage_data_disk.value["LUN"])}"
-      create_option   = "Empty"
-      managed_disk_type = "Premium_LRS"
-      lun             = storage_data_disk.value["LUN"] 
-      disk_size_gb    = storage_data_disk.value["Size"]
-      caching         = storage_data_disk.value["Caching"] == "" ? "ReadOnly" : storage_data_disk.value["Caching"]
+      name              = "DISK-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}-DATA${format("%02d",storage_data_disk.value["LUN"])}"
+      create_option     = "Empty"
+      managed_disk_type = storage_data_disk.value["Type"]
+      lun               = storage_data_disk.value["LUN"] 
+      disk_size_gb      = storage_data_disk.value["Size"]
+      caching           = storage_data_disk.value["Caching"] == "" ? "ReadOnly" : storage_data_disk.value["Caching"]
     }
   }
 
   os_profile {
-    computer_name  = "VM-${format("%s%02d", var.vm_prefix, count.index + 1)}"
+    computer_name  = "VM-${format("%s%02d", var.vm_prefix, count.index + var.offset + 1)}"
     admin_username = var.admin_username
   }
 

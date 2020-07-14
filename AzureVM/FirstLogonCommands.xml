@@ -4,14 +4,4 @@
       <Description>Allow WinRM access from any IP</Description>
       <Order>1</Order>
    </SynchronousCommand>
-   <SynchronousCommand>
-      <CommandLine>powershell.exe -Command "Set-Item WSMan:\localhost\Service\AllowUnencrypted -value $true"</CommandLine>
-      <Description>Allow Unencrypted WinRM connections</Description>
-      <Order>2</Order>
-   </SynchronousCommand>
-   <SynchronousCommand>
-      <CommandLine>powershell.exe -Command "Set-Item WSMan:\localhost\Service\Auth\Basic -value $true"</CommandLine>
-      <Description>Use Basic Authentication for WinRM</Description>
-      <Order>3</Order>
-   </SynchronousCommand>
 </FirstLogonCommands>

@@ -8,20 +8,11 @@ data "azurerm_resource_group" "rg_name" {
   name = var.resource_group_name
 }
 
-# User running Terraform
-module "userinfo" {
-  source = "https://somestorageaccount.blob.core.windows.net/tfmodules/AzureUserInfo.zip"
-}
-
 # Variables used internally
 locals {
 
   base_tags = {
     Source       = "TFModule-AzureKeyVault"
-    CreatedDate  = timestamp()
-    CreatorName  = module.userinfo.name
-    CreatorObjId = module.userinfo.object_id
-    CreatorType  = module.userinfo.object_type
   }
 
   tf_tag = module.userinfo.ado_user != "" ? merge(local.base_tags,{InitiatedBy = module.userinfo.ado_user}) : local.base_tags

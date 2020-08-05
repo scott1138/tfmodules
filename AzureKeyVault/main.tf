@@ -27,15 +27,4 @@ resource "azurerm_key_vault" "kv" {
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   sku_name                    = "standard"
   tags                        = merge(local.tf_tag, var.tags)
-
-  lifecycle {
-    ignore_changes = [
-      tags["CreatedDate"],
-      tags["CreatorName"],
-      tags["CreatorObjId"],
-      tags["CreatorType"],
-      tags["InitiatedBy"]
-    ]
-  }
 }
-

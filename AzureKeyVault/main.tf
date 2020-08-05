@@ -10,13 +10,9 @@ data "azurerm_resource_group" "rg_name" {
 
 # Variables used internally
 locals {
-
-  base_tags = {
+  tags = {
     Source       = "TFModule-AzureKeyVault"
   }
-
-  tf_tag = module.userinfo.ado_user != "" ? merge(local.base_tags,{InitiatedBy = module.userinfo.ado_user}) : local.base_tags
-  
 }
 
 resource "azurerm_key_vault" "kv" {
